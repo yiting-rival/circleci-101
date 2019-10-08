@@ -6,11 +6,13 @@ jobs:
 
     steps:
       - checkout
-
+      - setup_remote_docker
       - run:
           name: Greeting
           command: echo Hello, world.
 
       - run:
-          name: Print the Current Time
-          command: date
+          name: Run dockers
+          command: |
+            docker run -d --name nginx-app nginx
+            docker run --network container:nginx-app appropriate/curl --retry 10 --retry-connrefused http://localhost:80
